@@ -1,0 +1,22 @@
+{
+  "series": [
+    {
+      "id": "series1",
+      "title": "مسلسل المغامرة",
+      "poster": "https://via.placeholder.com/150",
+      "episodes": [
+        { "title": "الحلقة 1", "url": "video1.mp4" },
+        { "title": "الحلقة 2", "url": "video2.mp4" }
+      ]
+    },
+    {
+      "id": "series2",
+      "title": "مسلسل الدراما",
+      "poster": "https://via.placeholder.com/150",
+      "episodes": [
+        { "title": "الحلقة الأولى", "url": "video3.mp4" },
+        { "title": "الحلقة الثانية", "url": "video4.mp4" }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <title>المشغل الذكي</title>
+    <style>
+        body { display: flex; margin: 0; background: #000; color: #fff; font-family: Arial; height: 100vh; }
+        .main-video { flex: 3; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 20px; }
+        video { width: 100%; max-height: 80vh; border-radius: 8px; box-shadow: 0 0 20px rgba(0,0,0,0.5); }
+        .playlist { flex: 1; background: #111; overflow-y: auto; border-right: 1px solid #333; padding: 10px; }
+        .episode-item { padding: 15px; border-bottom: 1px solid #222; cursor: pointer; transition: 0.2s; }
+        .episode-item:hover { background: #222; color: #007bff; }
+        .active { background: #007bff !important; color: white; }
+        h2 { text-align: center; font-size: 1.2rem; }
+    </style>
+</head>
+<body>
+
+    <div class="playlist" id="playlist">
+        <h2 id="series-title">الحلقات</h2>
+        </div>
+
+    <div class="main-video">
+        <video id="video-player" controls autoplay></video>
+        <h3 id="episode-name">اختر حلقة للبدء</h3>
+    </div>
+
+    <script>
+        const urlParams = new URLSearchParams(window.location.search);
+        const seriesId = urlParams.get('id');
+        const videoPlayer = document.getElementById('video-player');
+        const episodeName = document.getElementById('episode-name');
+
+        fetch('data.json')
+            .then(res => res.json())
+            .then(data => {
+                const series = data.series.find(s => s.id === seriesId);
+                if (!series) {
+                    document.body.innerHTML = "<h1>المسلسل غير موجود</h1>";
+                    return;
+                }
+
+                document.getElementById('series-title').innerText = series.title;
+                const playlistDiv = document.getElementById('playlist');
+
+                series.episodes.forEach((ep, index) => {
+                    const item = document.createElement('div');
+                    item.className = 'episode-item';
+                    item.innerText = ep.title;
+                    item.onclick = () => {
+                        // تغيير الفيديو
+                        videoPlayer.src = ep.url;
+                        episodeName.innerText = ep.title;
+                        
+                        // تحديث الحالة النشطة
+                        document.querySelectorAll('.episode-item').forEach(el => el.classList.remove('active'));
+                        item.classList.add('active');
+                    };
+                    playlistDiv.appendChild(item);
+
+                    // تشغيل الحلقة الأولى تلقائيًا
+                    if(index === 0) item.click();
+                });
+            });
+    </script>
+</body>
+</html>
